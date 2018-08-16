@@ -1,4 +1,4 @@
-CPPUTEST_HOME=/home/tmoody/Downloads/cpputest-3.8
+CPPUTEST_HOME=../../cpputest-3.8
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest
 
