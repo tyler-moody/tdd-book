@@ -28,3 +28,7 @@ testexec:	$(OBJECT_FILES) $(TEST_OBJECT_FILES)
 
 test:	testexec
 	./testexec
+
+clean:
+	rm build/*
+	rm testexec
