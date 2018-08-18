@@ -18,6 +18,7 @@ TEST_OBJECT_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(TEST_FILE
 all:	testexec
 
 $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
+	@mkdir -p $(OBJECT_DIR)
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJECT_DIR)/%.o: $(TEST_DIR)/%.cpp
@@ -29,6 +30,7 @@ testexec:	$(OBJECT_FILES) $(TEST_OBJECT_FILES)
 test:	testexec
 	./testexec
 
+.SILENT: clean
 clean:
-	rm build/*
-	rm testexec
+	-@rm -rf build
+	-@rm -f testexec
