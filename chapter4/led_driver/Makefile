@@ -1,3 +1,5 @@
+MAKEFLAGS+= "j 8" # automatically do "make -j8"
+
 CPPUTEST_HOME=../../cpputest-3.8
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest
