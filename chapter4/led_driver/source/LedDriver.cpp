@@ -39,7 +39,7 @@ void LedDriver_TurnOn(int ledNumber){
 }
 
 static void clearLedImageBit(int ledNumber){
-    ledImage = *address & ~(convertLedNumberToBit(ledNumber));
+    ledImage = ledImage & ~(convertLedNumberToBit(ledNumber));
 }
 
 void LedDriver_TurnOff(int ledNumber){

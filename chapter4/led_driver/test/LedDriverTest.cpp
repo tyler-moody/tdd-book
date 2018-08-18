@@ -54,6 +54,10 @@ TEST(LedDriver, LedMemoryNotReadable){
     leds = 0xffff;
     LedDriver_TurnOn(8);
     LONGS_EQUAL(0x0080, leds);
+
+    leds = 0xffff;
+    LedDriver_TurnOff(8);
+    LONGS_EQUAL(0x0000, leds);
 }
 
 TEST(LedDriver, UpperAndLowerBounds){
