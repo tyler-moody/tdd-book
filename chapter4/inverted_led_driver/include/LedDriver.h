@@ -7,6 +7,8 @@ typedef enum {NORMAL, INVERTED} logic_t;
 
 void LedDriver_Create(uint16_t *address, logic_t levels);
 
+logic_t LedDriver_GetLevels();
+
 void LedDriver_TurnOn(int ledNumber);
 
 void LedDriver_TurnOnAll();

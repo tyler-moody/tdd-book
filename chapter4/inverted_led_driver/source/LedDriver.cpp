@@ -23,6 +23,10 @@ void LedDriver_Create(uint16_t *addr, logic_t lev){
     updateHardware();
 }
 
+logic_t LedDriver_GetLevels(){
+    return levels;
+}
+
 static uint16_t convertLedNumberToBit(int ledNumber){
     return 1 << (ledNumber-1);
 }

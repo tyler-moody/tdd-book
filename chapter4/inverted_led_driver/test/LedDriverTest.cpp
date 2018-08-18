@@ -2,10 +2,8 @@
 #include "LedDriver.h"
 #include "RuntimeErrorStub.h"
 
-static logic_t levels = NORMAL;
-
 static uint16_t expected(uint16_t reg){
-    if (levels == INVERTED){
+    if (LedDriver_GetLevels() == INVERTED){
         return ~reg;
     }
     return reg;
@@ -13,6 +11,7 @@ static uint16_t expected(uint16_t reg){
 
 TEST_GROUP(LedDriver){
     uint16_t leds;
+    logic_t levels = INVERTED;
 
     void setup()
     {
