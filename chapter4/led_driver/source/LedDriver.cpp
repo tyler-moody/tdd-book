@@ -1,4 +1,5 @@
 #include "LedDriver.h"
+#include "RuntimeError.h"
 
 static uint16_t *address;
 static uint16_t ledImage;
@@ -19,16 +20,33 @@ static uint16_t convertLedNumberToBit(int ledNumber){
     return 1 << (ledNumber-1);
 }
 
+enum {FIRST_LED = 1, LAST_LED = 16};
+static bool LedIsOutOfBounds(int ledNumber){
+    return ledNumber < FIRST_LED || ledNumber > LAST_LED;
+}
+
+static void setLedImageBit(int ledNumber){
+    ledImage = ledImage | convertLedNumberToBit(ledNumber);
+}
+
 void LedDriver_TurnOn(int ledNumber){
-    if (ledNumber <= 16 && ledNumber >= 1){
-        ledImage = ledImage | convertLedNumberToBit(ledNumber);
+    if (LedIsOutOfBounds(ledNumber)){
+        RUNTIME_ERROR("LED Driver: out-of-bounds LED", ledNumber);
+    } else {
+        setLedImageBit(ledNumber);
         updateHardware();
     }
 }
 
+static void clearLedImageBit(int ledNumber){
+    ledImage = *address & ~(convertLedNumberToBit(ledNumber));
+}
+
 void LedDriver_TurnOff(int ledNumber){
-    if (ledNumber <= 16 && ledNumber >= 1){
-        ledImage = *address & ~(convertLedNumberToBit(ledNumber));
+    if (LedIsOutOfBounds(ledNumber)){
+        RUNTIME_ERROR("LED Driver: out-of-bounds LED", ledNumber);
+    } else {
+        clearLedImageBit(ledNumber);
         updateHardware();
     }
 }
@@ -38,3 +56,20 @@ void LedDriver_TurnOnAll(){
     updateHardware();
 }
 
+bool LedDriver_IsOn(int ledNumber){
+    if (LedIsOutOfBounds(ledNumber)){
+        RUNTIME_ERROR("LED Driver: out-of-bounds LED", ledNumber);
+        return false;
+    } else {
+        return ledImage & convertLedNumberToBit(ledNumber);
+    }
+}
+
+bool LedDriver_IsOff(int ledNumber){
+    return !LedDriver_IsOn(ledNumber);;
+}
+
+void LedDriver_TurnOffAll(){
+    ledImage = ALL_LEDS_OFF;
+    updateHardware();
+}
