@@ -17,7 +17,7 @@ TEST_FILES = $(wildcard $(TEST_DIR)/*.cpp)
 OBJECT_FILES = $(patsubst $(SOURCE_DIR)/%.cpp,$(OBJECT_DIR)/%.o, $(SOURCE_FILES))
 TEST_OBJECT_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(TEST_FILES))
 
-all:	testexec
+all:	run
 
 $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(OBJECT_DIR)
@@ -29,7 +29,7 @@ $(OBJECT_DIR)/%.o: $(TEST_DIR)/%.cpp
 testexec:	$(OBJECT_FILES) $(TEST_OBJECT_FILES)
 	$(CXX) -Wall $(CPPFLAGS) $^ -o $@ $(LD_LIBRARIES)
 
-test:	testexec
+run:	testexec
 	./testexec
 
 .SILENT: clean
