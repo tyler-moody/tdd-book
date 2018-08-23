@@ -1,7 +1,9 @@
 #include "FakeTimeService.hpp"
 
-static Minute minute = TIME_UNKNOWN;
-static Day day = Day::DAY_UNKNOWN;
+FakeTimeService::FakeTimeService() : 
+    minute(TIME_UNKNOWN),
+    day(Day::DAY_UNKNOWN) {
+}
 
 void FakeTimeService::getTime(Time* time){
     time->minuteOfDay = minute;
@@ -9,11 +11,6 @@ void FakeTimeService::getTime(Time* time){
 }
 
 void FakeTimeService::setPeriodicAlarm(){
-}
-
-void FakeTimeService::reset(){
-    minute = TIME_UNKNOWN;
-    day = Day::DAY_UNKNOWN;
 }
 
 void FakeTimeService::setMinute(Minute m){

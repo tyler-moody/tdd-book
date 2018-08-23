@@ -1,12 +1,15 @@
+#include <memory>
 #include "CppUTest/TestHarness.h"
 #include "LightControllerSpy.hpp"
 #include "LightScheduler.hpp"
 #include "FakeTimeService.hpp"
 
+
 TEST_GROUP(LightScheduler){
-    FakeTimeService timeservice;
+    std::unique_ptr<FakeTimeService> timeservice;
 
     void setup(){
+        timeservice.reset(new FakeTimeService()); 
         LightController_Create();
     }
 
@@ -20,8 +23,8 @@ TEST(LightScheduler, NoChangeToLightsDuringInitialization){
 }
 
 TEST(LightScheduler, NoScheduleNothingHappens){
-    timeservice.setDay(Day::MONDAY);
-    timeservice.setMinute(100);
+    timeservice->setDay(Day::MONDAY);
+    timeservice->setMinute(100);
     LightScheduler_WakeUp();
     LONGS_EQUAL(LIGHT_ID_UNKNOWN, LightControllerSpy_GetLastId());
     LONGS_EQUAL(LIGHT_STATE_UNKNOWN, LightControllerSpy_GetLastState());

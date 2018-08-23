@@ -5,13 +5,14 @@
 
 class FakeTimeService: public TimeService {
     public:
+        FakeTimeService();
         void getTime(Time* t);
         void setPeriodicAlarm();
-        void reset();
         void setDay(Day d);
         void setMinute(Minute m);
     private:
-
+        Minute minute;
+        Day day;
 };
 
 #endif
