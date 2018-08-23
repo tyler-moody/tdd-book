@@ -3,10 +3,20 @@
 
 #include "LightController.hpp"
 
-light_id_t LightControllerSpy_GetLastId();
+class LightControllerSpy : public LightController {
+    public:
+        enum class LightState {UNKNOWN=-1, OFF=0, ON = 1};
 
-typedef enum {LIGHT_STATE_UNKNOWN, LIGHT_ON, LIGHT_OFF} light_state_t;
+        LightControllerSpy();
+        void On(Id id);
+        void Off(Id id);
 
-light_state_t LightControllerSpy_GetLastState();
+        Id getLastId();
+        LightState getLastState();
+
+    private:
+        Id lastId;
+        LightState lastState;
+};
 
 #endif
