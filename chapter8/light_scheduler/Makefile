@@ -1,5 +1,7 @@
 MAKEFLAGS+= "j 8" # automatically do "make -j8"
 
+CPPFLAGS += -Wall -Wextra -std=c++14
+
 CPPUTEST_HOME=../../cpputest-3.8
 CPPFLAGS += -I$(CPPUTEST_HOME)/include
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest
@@ -29,7 +31,7 @@ run:	testexec
 
 testexec:	$(STUB_OBJECT_FILES) $(TEST_OBJECT_FILES) $(OBJECT_FILES) 
 	echo $(STUB_OBJECT_FILES)
-	$(CXX) -Wall $(CPPFLAGS) $^ -o $@ $(LD_LIBRARIES)
+	$(CXX) $(CPPFLAGS) $^ -o $@ $(LD_LIBRARIES)
 
 $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	@mkdir -p $(OBJECT_DIR)
