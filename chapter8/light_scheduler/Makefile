@@ -10,26 +10,30 @@ HEADER_DIR = include
 SOURCE_DIR = source
 OBJECT_DIR = build
 TEST_DIR = test
-STUB_HEADER_DIR = test/stub/include
-STUB_SOURCE_DIR = test/stub/source
+STUB_HEADER_DIR = stub/include
+STUB_SOURCE_DIR = stub/source
+STUB_TEST_DIR = stub/test
 
 CPPFLAGS += -I$(HEADER_DIR)
 CPPFLAGS += -I$(STUB_HEADER_DIR)
 
 SOURCE_FILES = $(wildcard $(SOURCE_DIR)/*.cpp)
 TEST_FILES = $(wildcard $(TEST_DIR)/*.cpp)
+
 STUB_FILES = $(wildcard $(STUB_SOURCE_DIR)/*.cpp)
+STUB_TEST_FILES = $(wildcard $(STUB_TEST_DIR)/*.cpp)
 
 OBJECT_FILES = $(patsubst $(SOURCE_DIR)/%.cpp,$(OBJECT_DIR)/%.o, $(SOURCE_FILES))
 TEST_OBJECT_FILES = $(patsubst $(TEST_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(TEST_FILES))
-STUB_OBJECT_FILES= $(patsubst $(STUB_SOURCE_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(STUB_FILES))
+STUB_OBJECT_FILES = $(patsubst $(STUB_SOURCE_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(STUB_FILES))
+STUB_TEST_OBJECT_FILES = $(patsubst $(STUB_TEST_DIR)/%.cpp, $(OBJECT_DIR)/%.o, $(STUB_TEST_FILES))
 
 all:	run
 
 run:	testexec
 	./testexec
 
-testexec:	$(STUB_OBJECT_FILES) $(TEST_OBJECT_FILES) $(OBJECT_FILES) 
+testexec:	$(STUB_TEST_OBJECT_FILES) $(STUB_OBJECT_FILES) $(TEST_OBJECT_FILES) $(OBJECT_FILES) 
 	echo $(STUB_OBJECT_FILES)
 	$(CXX) $(CPPFLAGS) $^ -o $@ $(LD_LIBRARIES)
 
@@ -41,6 +45,9 @@ $(OBJECT_DIR)/%.o: $(TEST_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 $(OBJECT_DIR)/%.o: $(STUB_SOURCE_DIR)/%.cpp
+	$(CXX) $(CPPFLAGS) -c -o $@ $<
+
+$(OBJECT_DIR)/%.o: $(STUB_TEST_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) -c -o $@ $<
 
 .SILENT: clean
