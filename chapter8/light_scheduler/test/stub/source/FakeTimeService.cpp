@@ -1,22 +1,25 @@
 #include "FakeTimeService.hpp"
 
-static unsigned int _minute = TIME_UNKNOWN;
-static day_t _day = DAY_UNKNOWN;
+static Minute minute = TIME_UNKNOWN;
+static Day day = Day::DAY_UNKNOWN;
 
-void TimeService_GetTime(Time* time){
-    time->minuteOfDay = _minute;
-    time->dayOfWeek = _day;
+void FakeTimeService::getTime(Time* time){
+    time->minuteOfDay = minute;
+    time->dayOfWeek = day;
 }
 
-void FakeTimeService_Reset(){
-    _minute = TIME_UNKNOWN;
-    _day = DAY_UNKNOWN;
+void FakeTimeService::setPeriodicAlarm(){
 }
 
-void FakeTimeService_SetMinute(unsigned int minute){
-    _minute = minute;
+void FakeTimeService::reset(){
+    minute = TIME_UNKNOWN;
+    day = Day::DAY_UNKNOWN;
 }
 
-void FakeTimeService_SetDay(day_t day){
-    _day = day;
+void FakeTimeService::setMinute(Minute m){
+    minute = m;
+}
+
+void FakeTimeService::setDay(Day d){
+    day = d;
 }

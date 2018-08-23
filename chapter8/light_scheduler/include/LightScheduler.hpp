@@ -4,7 +4,7 @@
 #include "LightController.hpp"
 #include "TimeService.hpp"
 
-void LightScheduler_ScheduleTurnOn(light_id_t light_id, day_t day, int minute);
+void LightScheduler_ScheduleTurnOn(light_id_t light_id, Day day, Minute minute);
 
 void LightScheduler_RemoveSchedule();
 

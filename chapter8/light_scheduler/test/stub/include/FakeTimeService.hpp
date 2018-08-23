@@ -3,10 +3,15 @@
 
 #include "TimeService.hpp"
 
-void FakeTimeService_Reset();
+class FakeTimeService: public TimeService {
+    public:
+        void getTime(Time* t);
+        void setPeriodicAlarm();
+        void reset();
+        void setDay(Day d);
+        void setMinute(Minute m);
+    private:
 
-void FakeTimeService_SetDay(day_t day);
-
-void FakeTimeService_SetMinute(unsigned int minute);
+};
 
 #endif

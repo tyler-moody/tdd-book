@@ -2,9 +2,10 @@
 #include "FakeTimeService.hpp"
 
 TEST_GROUP(FakeTimeService){
+    FakeTimeService timeservice;
 
     void setup(){
-        FakeTimeService_Reset();
+        timeservice.reset();
     }
 
     void teardown(){
@@ -13,19 +14,18 @@ TEST_GROUP(FakeTimeService){
 
 TEST(FakeTimeService, Create){
     Time time;
-    TimeService_GetTime(&time);
+    timeservice.getTime(&time);
     LONGS_EQUAL(TIME_UNKNOWN, time.minuteOfDay);
-    LONGS_EQUAL(DAY_UNKNOWN, time.dayOfWeek);
+    LONGS_EQUAL(Day::DAY_UNKNOWN, time.dayOfWeek);
 }
 
 TEST(FakeTimeService, Set){
     Time time;
     unsigned int minute = 42;
-    day_t day = SATURDAY;
-    FakeTimeService_SetMinute(minute);
-    FakeTimeService_SetDay(day);
-    TimeService_GetTime(&time);
+    Day day = Day::SATURDAY;
+    timeservice.setMinute(minute);
+    timeservice.setDay(day);
+    timeservice.getTime(&time);
     LONGS_EQUAL(minute, time.minuteOfDay);
     LONGS_EQUAL(day, time.dayOfWeek);
 }
-
