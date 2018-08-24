@@ -4,17 +4,29 @@ LightScheduler::LightScheduler(TimeService* ts, LightController* lc) :
     timeService(ts),
     lightController(lc) {
     scheduledEvent.id = LightController::UNUSED_ID;
+
+    timeService->setPeriodicAlarm(60, std::bind(&LightScheduler::wakeUp, this));
 }
 
-void LightScheduler::processEventDueNow(const Time& time, const ScheduledLightEvent& lightEvent){
+LightScheduler::~LightScheduler(){
+    timeService->cancelPeriodicAlarm(std::bind(&LightScheduler::wakeUp, this));
+}
+
+void LightScheduler::processEventDueNow(const Time& now, const ScheduledLightEvent& lightEvent){
     if (lightEvent.id == LightController::UNUSED_ID){
         return;
     } 
-    if (lightEvent.minuteOfDay != time.minuteOfDay){
+    if (lightEvent.minuteOfDay != now.minuteOfDay){
         return;
     }
 
-    operateLight(lightEvent);
+    if ((lightEvent.day == Day::EVERYDAY) ||
+            (lightEvent.day == now.dayOfWeek) ||
+            (lightEvent.day == Day::WEEKEND && now.dayOfWeek == Day::SATURDAY) ||
+            (lightEvent.day == Day::WEEKEND && now.dayOfWeek == Day::SUNDAY)
+       ){
+        operateLight(lightEvent);
+    }
 }
 
 void LightScheduler::operateLight(const ScheduledLightEvent& lightEvent){
@@ -35,5 +47,6 @@ void LightScheduler::wakeUp() {
 void LightScheduler::scheduleEvent(LightController::Id light_id, Day day, Minute minute, Event event) {
     scheduledEvent.id = light_id;
     scheduledEvent.minuteOfDay = minute;
+    scheduledEvent.day = day;
     scheduledEvent.event = event;
 }

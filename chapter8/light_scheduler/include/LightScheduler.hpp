@@ -9,6 +9,7 @@ enum class Event {TURN_ON, TURN_OFF};
 class LightScheduler {
     public:
         LightScheduler(TimeService* ts, LightController* lc);
+        ~LightScheduler();
 
         void scheduleEvent(LightController::Id light_id, Day day, Minute minute, Event event);
 
@@ -24,6 +25,7 @@ class LightScheduler {
         typedef struct {
             unsigned int id;
             Minute minuteOfDay;
+            Day day;
             Event event;
         } ScheduledLightEvent;
 
