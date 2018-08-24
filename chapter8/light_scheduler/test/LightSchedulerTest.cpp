@@ -20,49 +20,56 @@ TEST_GROUP(LightScheduler){
         delete lightController;
         delete timeService;
     }
+
+    void setTimeTo(Day day, Minute minute){
+        timeService->setDay(day);
+        timeService->setMinute(minute);
+    }
+
+    void checkLightState(LightController::Id id, LightControllerSpy::LightState level){
+        LONGS_EQUAL(id, lightController->getLastId());
+        LONGS_EQUAL(level, lightController->getLastState());
+    }
 };
 
+
 TEST(LightScheduler, NoChangeToLightsDuringInitialization){
-    LONGS_EQUAL(LightController::UNKNOWN_ID, lightController->getLastId());
-    LONGS_EQUAL(LightControllerSpy::LightState::UNKNOWN, lightController->getLastState());
+    checkLightState(LightController::UNKNOWN_ID, LightControllerSpy::LightState::UNKNOWN);
 }
 
 TEST(LightScheduler, NoScheduleNothingHappens){
-    timeService->setDay(Day::MONDAY);
-    timeService->setMinute(100);
+    setTimeTo(Day::MONDAY, 100);
+
     lightScheduler->wakeUp();
-    LONGS_EQUAL(LightController::UNKNOWN_ID, lightController->getLastId());
-    LONGS_EQUAL(LightControllerSpy::LightState::UNKNOWN, lightController->getLastState());
+
+    checkLightState(LightController::UNKNOWN_ID, LightControllerSpy::LightState::UNKNOWN);
 }
 
 TEST(LightScheduler, ScheduleOnEverydayNotTimeYet){
-    lightScheduler->scheduleTurnOn(3, Day::EVERYDAY, 1200);
-    timeService->setDay(Day::MONDAY);
-    timeService->setMinute(1199);
+    lightScheduler->scheduleEvent(3, Day::EVERYDAY, 1200, Event::TURN_ON);
+    setTimeTo(Day::MONDAY, 1199);
+
     lightScheduler->wakeUp();
 
-    LONGS_EQUAL(LightController::UNKNOWN_ID, lightController->getLastId());
-    LONGS_EQUAL(LightControllerSpy::LightState::UNKNOWN, lightController->getLastState());
+    checkLightState(LightController::UNKNOWN_ID, LightControllerSpy::LightState::UNKNOWN);
 }
 
 TEST(LightScheduler, ScheduleOnEverydayItsTime) {
-    lightScheduler->scheduleTurnOn(3, Day::EVERYDAY, 1200);
-    timeService->setDay(Day::MONDAY);
-    timeService->setMinute(1200);
+    lightScheduler->scheduleEvent(3, Day::EVERYDAY, 1200, Event::TURN_ON);
+    setTimeTo(Day::MONDAY, 1200);
 
     lightScheduler->wakeUp();
     
-    LONGS_EQUAL(3, lightController->getLastId());
-    LONGS_EQUAL(LightControllerSpy::LightState::ON, lightController->getLastState());
+    checkLightState(3, LightControllerSpy::LightState::ON);
 }
 
 TEST(LightScheduler, ScheduleOffEverydayItsTime) {
-    lightScheduler->scheduleTurnOff(3, Day::EVERYDAY, 1200);
-    timeService->setDay(Day::MONDAY);
-    timeService->setMinute(1200);
+    lightScheduler->scheduleEvent(3, Day::EVERYDAY, 1200, Event::TURN_OFF);
+    setTimeTo(Day::MONDAY, 1200);
     
     lightScheduler->wakeUp();
 
+    checkLightState(3, LightControllerSpy::LightState::OFF);
     LONGS_EQUAL(3, lightController->getLastId());
     LONGS_EQUAL(LightControllerSpy::LightState::OFF, lightController->getLastState());
 }

@@ -1,7 +1,7 @@
 #ifndef _TimeService_h
 #define _TimeService_h
 
-enum class Day {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY, EVERYDAY, DAY_UNKNOWN};
+enum class Day {MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY, EVERYDAY, WEEKDAY, WEEKEND, DAY_UNKNOWN};
 
 typedef unsigned int Minute;
 

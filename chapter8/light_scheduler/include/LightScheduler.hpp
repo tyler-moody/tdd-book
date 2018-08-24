@@ -4,13 +4,13 @@
 #include "LightController.hpp"
 #include "TimeService.hpp"
 
+enum class Event {TURN_ON, TURN_OFF};
+
 class LightScheduler {
     public:
         LightScheduler(TimeService* ts, LightController* lc);
 
-        void scheduleTurnOn(LightController::Id light_id, Day day, Minute minute);
-
-        void scheduleTurnOff(LightController::Id light_id, Day day, Minute minute);
+        void scheduleEvent(LightController::Id light_id, Day day, Minute minute, Event event);
 
         void removeSchedule();
 
@@ -21,7 +21,6 @@ class LightScheduler {
         TimeService* timeService;
         LightController* lightController;
 
-        enum class Event {TURN_ON, TURN_OFF};
         typedef struct {
             unsigned int id;
             Minute minuteOfDay;
@@ -29,6 +28,10 @@ class LightScheduler {
         } ScheduledLightEvent;
 
         ScheduledLightEvent scheduledEvent;
+
+        void processEventDueNow(const Time& time, const ScheduledLightEvent& lightEvent);
+
+        void operateLight(const ScheduledLightEvent& lightEvent);
 };
 
 #endif
