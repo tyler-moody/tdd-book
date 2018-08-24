@@ -70,6 +70,13 @@ TEST(LightScheduler, ScheduleOffEverydayItsTime) {
     lightScheduler->wakeUp();
 
     checkLightState(3, LightControllerSpy::LightState::OFF);
-    LONGS_EQUAL(3, lightController->getLastId());
-    LONGS_EQUAL(LightControllerSpy::LightState::OFF, lightController->getLastState());
+}
+
+TEST(LightScheduler, ScheduleTuesdayButItsMonday){
+    lightScheduler->scheduleEvent(3, Day::TUESDAY, 1200, Event::TURN_ON);
+    setTimeTo(Day::MONDAY, 1200);
+
+    lightScheduler->wakeUp();
+
+    checkLightState(3, LightControllerSpy::LightState::UNKNOWN);
 }
