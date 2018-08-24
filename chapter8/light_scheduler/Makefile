@@ -34,7 +34,6 @@ run:	testexec
 	./testexec
 
 testexec:	$(STUB_TEST_OBJECT_FILES) $(STUB_OBJECT_FILES) $(TEST_OBJECT_FILES) $(OBJECT_FILES) 
-	echo $(STUB_OBJECT_FILES)
 	$(CXX) $(CPPFLAGS) $^ -o $@ $(LD_LIBRARIES)
 
 $(OBJECT_DIR)/%.o: $(SOURCE_DIR)/%.cpp

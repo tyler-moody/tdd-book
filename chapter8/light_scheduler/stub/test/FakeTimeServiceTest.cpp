@@ -3,10 +3,10 @@
 #include "FakeTimeService.hpp"
 
 TEST_GROUP(FakeTimeService){
-    std::unique_ptr<FakeTimeService> timeservice;
+    std::shared_ptr<FakeTimeService> timeservice;
 
     void setup(){
-        timeservice.reset(new FakeTimeService());
+        timeservice = std::make_shared<FakeTimeService>();
     }
 
     void teardown(){
@@ -15,7 +15,7 @@ TEST_GROUP(FakeTimeService){
 
 TEST(FakeTimeService, Create){
     Time time;
-    timeservice->getTime(&time);
+    timeservice->getTime(time);
     LONGS_EQUAL(TIME_UNKNOWN, time.minuteOfDay);
     LONGS_EQUAL(Day::DAY_UNKNOWN, time.dayOfWeek);
 }
@@ -26,7 +26,7 @@ TEST(FakeTimeService, Set){
     Day day = Day::SATURDAY;
     timeservice->setMinute(minute);
     timeservice->setDay(day);
-    timeservice->getTime(&time);
+    timeservice->getTime(time);
     LONGS_EQUAL(minute, time.minuteOfDay);
     LONGS_EQUAL(day, time.dayOfWeek);
 }

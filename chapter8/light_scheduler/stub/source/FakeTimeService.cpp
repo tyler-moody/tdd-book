@@ -5,9 +5,9 @@ FakeTimeService::FakeTimeService() :
     day(Day::DAY_UNKNOWN) {
 }
 
-void FakeTimeService::getTime(Time* time){
-    time->minuteOfDay = minute;
-    time->dayOfWeek = day;
+void FakeTimeService::getTime(Time& t){
+    t.minuteOfDay = minute;
+    t.dayOfWeek = day;
 }
 
 void FakeTimeService::setPeriodicAlarm(){

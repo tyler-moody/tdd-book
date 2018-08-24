@@ -14,7 +14,7 @@ typedef struct {
 
 class TimeService {
     public:
-        virtual void getTime(Time* time) = 0;
+        virtual void getTime(Time& time) = 0;
         virtual void setPeriodicAlarm() = 0;
     private:
 };

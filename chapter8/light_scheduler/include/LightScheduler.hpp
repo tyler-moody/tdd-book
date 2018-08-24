@@ -4,10 +4,31 @@
 #include "LightController.hpp"
 #include "TimeService.hpp"
 
-void LightScheduler_ScheduleTurnOn(LightController::Id light_id, Day day, Minute minute);
+class LightScheduler {
+    public:
+        LightScheduler(TimeService* ts, LightController* lc);
 
-void LightScheduler_RemoveSchedule();
+        void scheduleTurnOn(LightController::Id light_id, Day day, Minute minute);
 
-void LightScheduler_WakeUp();
+        void scheduleTurnOff(LightController::Id light_id, Day day, Minute minute);
+
+        void removeSchedule();
+
+        void wakeUp();
+
+
+    private:
+        TimeService* timeService;
+        LightController* lightController;
+
+        enum class Event {TURN_ON, TURN_OFF};
+        typedef struct {
+            unsigned int id;
+            Minute minuteOfDay;
+            Event event;
+        } ScheduledLightEvent;
+
+        ScheduledLightEvent scheduledEvent;
+};
 
 #endif

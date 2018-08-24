@@ -5,6 +5,7 @@ class LightController {
     public:
         typedef unsigned int Id;
         static const Id UNKNOWN_ID = -1;
+        static const Id UNUSED_ID = -1;
 
         virtual void On(Id id) = 0;
         virtual void Off(Id id) = 0;

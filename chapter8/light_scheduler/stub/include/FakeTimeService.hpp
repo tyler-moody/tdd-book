@@ -3,10 +3,10 @@
 
 #include "TimeService.hpp"
 
-class FakeTimeService: public TimeService {
+class FakeTimeService final: public TimeService {
     public:
         FakeTimeService();
-        void getTime(Time* t);
+        void getTime(Time& t);
         void setPeriodicAlarm();
         void setDay(Day d);
         void setMinute(Minute m);
