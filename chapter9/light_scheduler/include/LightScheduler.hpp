@@ -3,15 +3,18 @@
 
 #include "LightController.hpp"
 #include "TimeService.hpp"
+#include "RandomMinute.h"
 
 enum class Event {TURN_ON, TURN_OFF};
 
 class LightScheduler {
     public:
-        LightScheduler(TimeService* ts, LightController* lc);
+        LightScheduler(TimeService* ts, LightController* lc, RandomMinute* rm);
         ~LightScheduler();
 
         void scheduleEvent(LightController::Id light_id, Day day, Minute minute, Event event);
+
+        void randomize(LightController::Id light_id, Day day, Minute minute);
 
         void removeSchedule();
 
@@ -21,6 +24,7 @@ class LightScheduler {
     private:
         TimeService* timeService;
         LightController* lightController;
+        RandomMinute* randomMinute;
 
         typedef struct {
             unsigned int id;

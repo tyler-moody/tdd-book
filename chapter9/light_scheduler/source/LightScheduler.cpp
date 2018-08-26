@@ -1,8 +1,9 @@
 #include "LightScheduler.hpp"
 
-LightScheduler::LightScheduler(TimeService* ts, LightController* lc) :
+LightScheduler::LightScheduler(TimeService* ts, LightController* lc, RandomMinute* rm) :
     timeService(ts),
-    lightController(lc) {
+    lightController(lc),
+    randomMinute(rm) {
     scheduledEvent.id = LightController::UNUSED_ID;
 
     timeService->setPeriodicAlarm(); // 60, std::bind(&LightScheduler::wakeUp, this));
@@ -49,4 +50,18 @@ void LightScheduler::scheduleEvent(LightController::Id light_id, Day day, Minute
     scheduledEvent.minuteOfDay = minute;
     scheduledEvent.day = day;
     scheduledEvent.event = event;
+}
+
+void LightScheduler::randomize(LightController::Id light_id, Day day, Minute minute){
+    if (scheduledEvent.id == light_id &&
+            scheduledEvent.day == day &&
+            scheduledEvent.minuteOfDay == minute){
+        scheduledEvent.minuteOfDay += randomMinute->Get();
+        if (scheduledEvent.minuteOfDay < 0){
+            scheduledEvent.minuteOfDay = 0;
+        }
+        if (scheduledEvent.minuteOfDay > 1440){
+            scheduledEvent.minuteOfDay = 1440;
+        }
+    }
 }

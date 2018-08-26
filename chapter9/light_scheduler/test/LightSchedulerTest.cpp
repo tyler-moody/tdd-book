@@ -5,22 +5,26 @@
 #include "LightControllerSpy.hpp"
 #include "LightScheduler.hpp"
 #include "FakeTimeService.hpp"
+#include "FakeRandomMinute.h"
 
 TEST_GROUP(LightScheduler){
-    LightScheduler* lightScheduler;
     FakeTimeService* timeService;
     LightControllerSpy* lightController;
+    RandomMinute* randomMinute;
+    LightScheduler* lightScheduler;
 
     void setup(){
         timeService = new FakeTimeService();
         lightController = new LightControllerSpy();
-        lightScheduler = new LightScheduler(timeService, lightController);
+        randomMinute = new RandomMinute(30);
+        lightScheduler = new LightScheduler(timeService, lightController, randomMinute);
     }
 
     void teardown(){
         delete lightScheduler;
         delete lightController;
         delete timeService;
+        delete randomMinute;
     }
 
     void setTimeTo(Day day, Minute minute){
@@ -127,30 +131,44 @@ TEST(LightScheduler, ScheduleWeekendItsMonday){
 
     checkLightState(LightController::UNKNOWN_ID, LightControllerSpy::LightState::UNKNOWN);
 }
-
 ///////////////////////////////////////////////////////////////////////////////
 
-/*
-TEST_GROUP(LightSchedulerInitAndCleanup){
-    LightScheduler* lightScheduler;
-    FakeTimeService* timeService;
-    LightControllerSpy* lightController;
+TEST_GROUP(LightSchedulerRandomize){
+    FakeTimeService* timeService = nullptr;
+    LightControllerSpy* lightController = nullptr;
+    LightScheduler* lightScheduler = nullptr;
+    FakeRandomMinute* randomMinute = nullptr;
 
     void setup(){
-        lightController = new LightControllerSpy();
         timeService = new FakeTimeService();
-        lightScheduler = new LightScheduler(timeService, lightController);
+        lightController = new LightControllerSpy();
+        randomMinute = new FakeRandomMinute(30);
+        lightScheduler = new LightScheduler(timeService, lightController, randomMinute);
     }
 
     void teardown(){
         delete lightScheduler;
-        delete timeService;
+        delete randomMinute;
         delete lightController;
+        delete timeService;
+    }
+
+    void setTimeTo(Day day, Minute minute){
+        timeService->setDay(day);
+        timeService->setMinute(minute);
+    }
+
+    void checkLightState(LightController::Id id, LightControllerSpy::LightState level){
+        LONGS_EQUAL(id, lightController->getLastId());
+        LONGS_EQUAL(level, lightController->getLastState());
     }
 };
 
-TEST(LightSchedulerInitAndCleanup, CreateStartsOneMinuteAlarm){
-    // callback unchecked - std::function is not a comparable type
-    LONGS_EQUAL(60, timeService->getAlarmPeriod());
+TEST(LightSchedulerRandomize, TurnsOnEarly){
+    randomMinute->SetFirstAndIncrement(-10, 5);
+    lightScheduler->scheduleEvent(4, Day::EVERYDAY, 600, Event::TURN_ON);
+    lightScheduler->randomize(4, Day::EVERYDAY, 600);
+    setTimeTo(Day::MONDAY, 600-10);
+    lightScheduler->wakeUp();
+    checkLightState(4, LightControllerSpy::LightState::ON);
 }
-*/
