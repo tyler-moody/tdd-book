@@ -46,7 +46,10 @@ class CircularBuffer {
             FormatOutput("Circular buffer content:\n<");
             size_t it = front;
             while (it != back){
-                FormatOutput("%d,", contents[it]);
+                FormatOutput("%d", contents[it]);
+                if ( ((it+1)%capacity) != (back)){
+                    FormatOutput(", ");
+                }
                 it = (it+1)%capacity;
             }
             FormatOutput(">\n");

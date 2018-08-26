@@ -32,7 +32,7 @@ TEST(CircularBufferPrint, PrintEmpty){
 }
 
 TEST(CircularBufferPrint, PrintAfterOneIsPut){
-    expectedOutput = "Circular buffer content:\n<17,>\n";
+    expectedOutput = "Circular buffer content:\n<17>\n";
     circularBuffer->Put(17);
 
     circularBuffer->Print();
@@ -41,7 +41,7 @@ TEST(CircularBufferPrint, PrintAfterOneIsPut){
 }
 
 TEST(CircularBufferPrint, PrintNotYetWrappedOrFull){
-    expectedOutput = "Circular buffer content:\n<10,20,30,>\n";
+    expectedOutput = "Circular buffer content:\n<10, 20, 30>\n";
     circularBuffer->Put(10);
     circularBuffer->Put(20);
     circularBuffer->Put(30);
@@ -52,7 +52,7 @@ TEST(CircularBufferPrint, PrintNotYetWrappedOrFull){
 }
 
 TEST(CircularBufferPrint, PrintNotYetWrappedAndIsFull){
-    expectedOutput = "Circular buffer content:\n<31,41,59,26,53,>\n";
+    expectedOutput = "Circular buffer content:\n<31, 41, 59, 26, 53>\n";
     circularBuffer = std::make_shared<CircularBuffer>(5);
     circularBuffer->Put(31);
     circularBuffer->Put(41);
@@ -66,7 +66,7 @@ TEST(CircularBufferPrint, PrintNotYetWrappedAndIsFull){
 }
 
 TEST(CircularBufferPrint, PrintOldToNewWhenWrappedAndFull){
-    expectedOutput = "Circular buffer content:\n<201,202,203,204,999,>\n";
+    expectedOutput = "Circular buffer content:\n<201, 202, 203, 204, 999>\n";
     circularBuffer = std::make_shared<CircularBuffer>(5);
     circularBuffer->Put(200);
     circularBuffer->Put(201);
