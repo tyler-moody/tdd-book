@@ -12,7 +12,7 @@ TEST_GROUP(Production){
 };
 
 TEST(Production, first){
-    mock().expectOneCall("dependency");
+    mock().expectOneCall("dependency").withParameter("arg", 1);
     production();
     mock().checkExpectations();
 }

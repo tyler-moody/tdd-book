@@ -1,6 +1,6 @@
 #include "CppUTestExt/MockSupport.h"
 #include "dependency.hpp"
 
-void dependency(int unused){
-    mock().actualCall("dependency");
+void dependency(int arg){
+    mock().actualCall("dependency").withParameter("arg", arg);
 }
